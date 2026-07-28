@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>/HOSTAGE</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html,body{
+height:100%;
+overflow:hidden;
+background:#000;
+color:white;
+font-family:"IBM Plex Mono",monospace;
+}
+
+body:before{
+content:"";
+position:fixed;
+inset:0;
+background:
+repeating-linear-gradient(
+transparent 0px,
+rgba(255,255,255,.02) 1px,
+transparent 2px,
+transparent 4px
+);
+pointer-events:none;
+}
+
+body:after{
+content:"";
+position:fixed;
+inset:0;
+background:radial-gradient(circle,transparent 60%,rgba(0,0,0,.75));
+pointer-events:none;
+}
+
+#particles{
+position:fixed;
+inset:0;
+overflow:hidden;
+}
+
+.particle{
+position:absolute;
+background:white;
+border-radius:50%;
+opacity:.15;
+filter:blur(2px);
+animation:fall linear infinite;
+}
+
+@keyframes fall{
+from{
+transform:translateY(-10vh);
+}
+to{
+transform:translateY(120vh);
+}
+}
+
+
+.title{
+position:fixed;
+bottom:55px;
+left:50%;
+transform:translateX(-50%);
+font-size:72px;
+font-family:Cinzel,serif;
+letter-spacing:10px;
+z-index:1000;
+text-shadow:
+0 0 10px white,
+0 0 20px white,
+0 0 50px rgba(255,255,255,.8);
+animation: hostagePulse 2.2s ease-in-out infinite;
+}
+
+@keyframes hostagePulse{
+0%,100%{opacity:.55;transform:translateX(-50%) scale(.97);text-shadow:0 0 6px white,0 0 12px white,0 0 28px rgba(255,255,255,.45);}
+50%{opacity:1;transform:translateX(-50%) scale(1.03);text-shadow:0 0 10px white,0 0 24px white,0 0 55px rgba(255,255,255,.9);}
+}
+
+
+/* MUSIC */
+
+.musicPlayer{
+display:flex;
+align-items:center;
+gap:6px;
+height:26px;
+margin-left:auto;
+padding:2px 5px;
+background:#c0c0c0;
+border-top:2px solid white;
+border-left:2px solid white;
+border-right:2px solid #555;
+border-bottom:2px solid #555;
+z-index:9999;
+font-family:Tahoma,sans-serif;
+}
+
+.musicPlayer span{
+display:block;
+font-size:11px;
+margin:0;
+letter-spacing:0;
+color:black;
+white-space:nowrap;
+}
+
+.musicPlayer audio{
+width:150px;
+height:22px;
+filter:grayscale(100%);
+}
+
+
+/* SIDEBAR */
+
+.sidebar{
+position:absolute;
+left:20px;
+top:150px;
+width:82px;
+}
+
+.card{
+border:1px solid rgba(255,255,255,.7);
+margin-bottom:20px;
+padding:8px;
+background:rgba(255,255,255,.03);
+cursor:pointer;
+transition:.2s;
+}
+
+.card:hover{
+background:rgba(255,255,255,.08);
+transform:translateX(6px);
+}
+
+.thumb{
+height:55px;
+background-size:cover;
+background-position:center;
+filter:grayscale(100%);
+margin-bottom:8px;
+}
+
+.card span{
+display:block;
+text-align:center;
+font-size:12px;
+}
+
+
+/* ASCII */
+
+.ascii{
+position:absolute;
+right:100px;
+top:180px;
+font-size:13px;
+line-height:12px;
+white-space:pre;
+color:rgba(255,255,255,.8);
+text-shadow:0 0 8px rgba(255,255,255,.3);
+}
+
+
+/* TASKBAR */
+
+.taskbar{
+position:absolute;
+bottom:0;
+left:0;
+right:0;
+height:38px;
+background:linear-gradient(#bababa,#8d8d8d);
+display:flex;
+align-items:center;
+padding:6px;
+border-top:2px solid white;
+}
+
+.taskbutton{
+padding:3px 14px;
+background:#c0c0c0;
+
+border-top:2px solid white;
+border-left:2px solid white;
+border-right:2px solid #555;
+border-bottom:2px solid #555;
+
+margin-right:8px;
+color:black;
+cursor:pointer;
+}
+
+.clock{
+margin-left:auto;
+color:black;
+}
+
+
+/* WINDOWS */
+
+.window{
+position:fixed;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+
+width:430px;
+
+background:#c0c0c0;
+
+border-top:2px solid white;
+border-left:2px solid white;
+border-right:2px solid #444;
+border-bottom:2px solid #444;
+
+display:none;
+z-index:99999;
+
+box-shadow:10px 10px rgba(0,0,0,.5);
+
+font-family:Tahoma,sans-serif;
+color:black;
+}
+
+.windowTitle{
+background:linear-gradient(to right,#000080,#1084d0);
+color:white;
+padding:5px 8px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+font-weight:bold;
+}
+
+.close{
+background:#c0c0c0;
+
+border-top:2px solid white;
+border-left:2px solid white;
+border-right:2px solid #444;
+border-bottom:2px solid #444;
+
+width:24px;
+height:22px;
+
+cursor:pointer;
+}
+
+.windowBody{
+padding:20px;
+line-height:1.6;
+}
+
+.windowBody img{
+width:110px;
+height:110px;
+object-fit:cover;
+border:2px solid gray;
+margin-bottom:15px;
+}
+
+
+/* START MENU */
+
+.startMenu{
+position:fixed;
+bottom:42px;
+left:6px;
+
+width:220px;
+
+background:#c0c0c0;
+
+border-top:2px solid white;
+border-left:2px solid white;
+border-right:2px solid #444;
+border-bottom:2px solid #444;
+
+display:none;
+
+z-index:999999;
+
+font-family:Tahoma,sans-serif;
+color:black;
+}
+
+.startHeader{
+background:#000080;
+color:white;
+padding:10px;
+font-weight:bold;
+}
+
+.startItem{
+padding:10px;
+cursor:pointer;
+}
+
+.startItem:hover{
+background:#000080;
+color:white;
+}
+
+
+.docContent{
+white-space:pre-wrap;
+font-family:"IBM Plex Mono",monospace;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="particles"></div>
+<div class="title">/HOSTAGE</div>
+
+
+<div class="sidebar">
+
+<div class="card"
+data-name="Greed"
+data-handle="@v9fs"
+data-bio="Founder @ Hostage.sh"
+data-img="https://i.imgur.com/Lyz8cTg.jpeg">
+
+<div class="thumb" style="background-image:url('https://i.imgur.com/Lyz8cTg.jpeg')"></div>
+<span>Greed</span>
+
+</div>
+
+
+<div class="card"
+data-name="dior"
+data-handle="@diorbands"
+data-bio="HV23FekdGm9eZ5yAjD928WWqPrF4DFy4Rz98 KfksioPf"
+data-img="https://i.imgur.com/ramWBzz.png">
+
+<div class="thumb" style="background-image:url('https://i.imgur.com/ramWBzz.png')"></div>
+<span>Dior</span>
+
+</div>
+
+
+<div class="card"
+data-name="slav"
+data-handle="@drugsarelwkbad"
+data-bio="Previous Cybersecurity Analyist."
+data-img="https://i.imgur.com/4Xej4Qx.jpeg">
+
+<div class="thumb" style="background-image:url('https://i.imgur.com/4Xej4Qx.jpeg')"></div>
+<span>slav</span>
+
+</div>
+
+
+<div class="card"
+data-name="Lucid"
+data-handle="@smoknkush"
+data-bio=""
+data-img="https://i.imgur.com/WzZdS6n.png">
+
+<div class="thumb" style="background-image:url('https://i.imgur.com/WzZdS6n.png')"></div>
+<span>Lucid</span>
+
+</div>
+
+
+<div class="card" data-name="Cipher" data-handle="@cipher" data-bio="Placeholder member." data-img="https://via.placeholder.com/110">
+<div class="thumb" style="background-image:url('https://via.placeholder.com/110')"></div><span>Cipher</span></div>
+<div class="card" data-name="Nova" data-handle="@nova" data-bio="Placeholder member." data-img="https://via.placeholder.com/110">
+<div class="thumb" style="background-image:url('https://via.placeholder.com/110')"></div><span>Nova</span></div>
+
+</div>
+
+<pre class="ascii">
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⠤⠔⠂⠀⠀⠀⠀⠀⠀⠀⠀⠉⠀⠒⠒⠢⠤⢄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡠⠔⠚⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠐⠢⠄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠔⠊⠁⠀⠀⢀⣀⠀⢀⣀⣠⣀⣀⣴⢶⣤⣤⣤⣀⣀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣠⣤⣶⣿⣷⠢⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡴⠊⠁⠀⢀⡠⢖⡪⠟⣚⣽⡿⠟⠋⣻⣿⣿⢿⣿⣿⡷⣾⣘⢻⣷⣶⣖⣊⣩⡥⠶⠚⠉⠁⣴⠋⣾⡇⠈⠑⢦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⢀⣴⣭⠭⠽⠿⠿⠷⢾⣿⣶⣾⣿⠋⠀⢠⣾⣿⠟⡹⢿⡋⢳⣝⢦⡝⠻⣯⡙⠿⣿⣶⣄⠀⠀⠀⡾⠁⠀⣙⡇⠀⠀⠀⠈⠢⡀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⡴⠋⢥⡀⠀⠀⠀⠀⠀⢿⣿⣿⡟⣅⠃⣠⣿⣿⡏⠀⡇⡞⣧⠀⢻⡆⠙⢦⠻⣿⣆⠀⠙⢿⣿⣿⠟⠛⢤⡀⢩⡇⠀⠀⠀⠀⠀⠈⢢⡀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⣰⣯⠀⠀⠀⠹⢦⣀⡀⠄⣰⣿⣿⡿⣰⢚⣾⢿⣿⠏⠀⢠⠀⡁⢻⡇⠀⢿⠀⠈⢳⡘⣿⣧⣠⢋⡘⣮⣿⣷⠀⣽⣾⡇⠀⠀⠀⠀⠀⠀⠈⠙⢆⠀⠀⠀⠀⠀
+⠀⠀⢀⡜⠁⢻⠃⠀⠁⠀⢀⡿⠷⣾⣿⣿⡟⢙⢻⣿⣯⣿⡏⢤⡀⣾⠀⠀⠘⣯⠀⠘⡇⠀⠈⣷⡺⡏⢿⣶⣟⠛⠹⣿⣄⠸⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠈⢣⡀⠀⠀⠀
+⠀⢀⠎⠀⠀⠘⣦⠀⢀⣤⡏⠀⢨⣿⣿⡏⠀⠀⡈⣿⣿⠇⠕⡶⡝⡿⢅⣠⠀⣿⠀⠀⢿⠄⠀⠘⣧⣇⠘⣇⢹⣵⠖⠻⣿⣾⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠱⡀⠀⠀
+⠀⠎⠀⠀⠀⠀⢹⣇⠈⢉⡏⠀⢸⣿⡟⠀⠀⠀⢸⢷⣿⠄⠀⠀⢀⣇⣀⢸⡀⣿⠀⠀⠸⡄⠀⠀⢿⣻⠃⠸⡆⠀⢰⡄⠘⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠱⡀⠀
+⠀⠀⠀⠀⠀⠀⡞⢻⣧⡨⡦⠀⠸⡏⢹⠀⠢⠀⣼⣿⡏⠀⠀⠀⢸⡇⠘⢸⡇⢸⠀⠀⠀⠁⡀⠀⢸⣿⡇⠀⢿⡄⠈⣇⠀⢹⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢣⠀
+⠀⠀⠀⠀⠀⢰⠃⠀⢹⣯⣙⢶⣤⣗⣿⣀⠀⠀⣿⣿⠀⠀⠀⠀⣸⡇⢀⣼⡇⢸⠀⠀⠀⠀⡄⠀⢸⣿⡇⠀⢸⣧⡄⢹⡒⠗⣻⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⡆
+⠀⠀⠀⠀⠀⠘⠀⠀⠀⣷⡏⢻⣿⣯⠙⢛⣿⢸⣿⣿⠀⠠⠀⢀⣿⠁⠀⣿⣇⣾⠀⠀⠀⢀⣿⣄⣼⣿⡇⠀⠸⣿⣧⢺⢽⣦⠿⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢧⣾⣿⢧⣶⠶⠟⣾⣾⡇⠀⡇⢠⣸⣿⣀⣴⣿⣿⣿⠀⠀⣄⣼⣿⣸⡟⣿⣷⡧⣴⣿⣧⢸⣸⣿⢸⢿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢻⢿⣾⣿⠀⠀⡟⣿⣃⣰⡧⣴⣿⣿⣿⣿⣽⣿⣿⡄⣼⣿⣿⣟⣿⡗⣿⣟⣿⣿⣿⣻⣾⣿⣿⠘⣾⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣸⠟⠹⡌⢸⣯⣿⠁⣾⢰⣿⣽⣿⣿⡟⣿⣿⣿⣽⢻⣿⣿⣿⡟⠀⣿⣿⣷⠟⢿⣟⢹⣿⣿⣸⣿⣧⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⡰⣰⠀⠀⠀⠀⠀⢠⠇⠀⠀⢳⣿⢻⣟⣸⣏⣾⣷⣿⡿⠋⣸⠿⣿⣿⣿⣿⣿⠿⠟⢀⣤⣿⣿⣥⣤⠈⣿⣿⣿⣿⣿⡇⠈⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⢰⢣⠃⡀⠀⡀⠀⠀⠈⢰⡆⠀⠈⣿⣼⢽⣿⣿⣿⣿⣯⣴⣾⣗⣺⠉⠉⠁⠀⠀⠀⢘⣿⠿⠛⠛⠛⠛⢶⣿⣿⣿⣿⣿⣏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⣦⠏⣸⡇⠀⢣⠀⣠⢠⣿⠃⠀⠀⡇⢻⠾⢿⣿⠿⠟⠛⠋⠛⠛⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⢸⠙⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⣀⠀⠇⢳⠀⢈⣷⡷⢻⣿⡄⠀⠀⡇⠘⣇⠘⣅⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⣿⣿⣿⣧⡿⠓⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⢀⣭⠿⠦⣀⠀⠉⠹⣧⣼⡟⡇⠀⠀⡇⠀⣿⣄⠘⢆⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⠀⠀⠀⠀⠀⠀⠀⣠⣿⣿⢹⡏⣿⠟⢉⡔⠒⠂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⡀⠀⠸⣜⣄⣠⢼⣷⣦⢤⣤⣙⡇⡇⠀⠀⡇⠀⣿⣽⠷⣌⠳⣄⠀⠀⠀⢠⠞⠋⠉⠉⠻⡇⠀⠀⠀⣠⣾⣿⣿⣿⣼⠇⡿⢉⣉⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⠆
+⢣⠀⠀⠈⠓⠒⠋⢰⢨⡉⠩⢉⡅⣿⠆⠀⣿⣀⣿⣥⣖⣯⣷⣮⣳⣄⠀⠘⢦⣀⣀⣠⠼⠃⢀⣤⣾⣿⣿⣿⣿⣿⣿⢤⡿⠽⠛⠿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡜⠀
+⠀⢆⠀⠀⠀⠀⠀⣀⣷⣝⠳⣾⢰⢿⠀⠀⢹⣬⣿⡟⠫⠾⢿⣿⣏⡙⠻⠤⣄⣀⣀⣀⣤⡞⠉⠿⣿⣿⣿⣿⣿⣿⣧⣸⣧⡀⢀⣴⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡰⠁⠀
+⠀⠈⢆⠀⠀⣠⠚⠁⠀⣹⣟⣿⢸⣾⡄⠀⠘⣿⣇⠙⣢⣴⡿⠛⠳⣿⣄⠀⠀⠉⠉⠻⣿⣷⣀⠀⢸⣿⠛⠛⢻⣿⣿⣾⣷⡌⠳⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡰⠁⠀⠀
+⠀⠀⠈⢣⡀⠃⠀⢀⡴⠛⠉⠸⣼⣷⢳⡄⠀⢹⣏⣉⣽⣫⠟⠀⠀⠀⠉⠓⠒⠶⣤⣶⣏⠀⠋⣷⣮⣛⣯⣙⣿⣟⣿⣧⠿⣿⣆⢹⠀⠀⠀⠀⠀⠀⠀⠀⢀⡜⠁⠀⠀⠀
+⠀⠀⠀⠀⠱⣄⣠⣾⢎⣤⡤⢶⣿⠿⠭⣟⣳⣶⡏⢻⣿⣄⠀⢀⣀⣤⣤⣤⣀⣼⣿⣿⣿⣿⣿⣿⣿⣿⡿⣿⣿⣿⡿⠋⠀⠈⠹⣾⠀⠀⠀⠀⠀⠀⠀⣠⠎⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠈⠻⣷⣿⠏⢠⠛⡇⠀⡇⠀⢹⠈⢿⣸⣿⡿⣶⣯⡴⠾⠛⠛⠉⣩⣿⣠⣿⣤⡀⠀⠀⣸⣇⢻⣿⣿⣀⠀⠀⠀⠀⢸⣧⡀⠀⠀⠀⢀⠔⠁⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠈⠻⣀⣿⠀⡇⠀⡇⠀⢸⠀⢸⡿⠛⡇⢿⣷⡇⠀⠀⠀⣼⣫⣿⣿⣷⣌⣉⠀⠀⣿⢹⣿⣿⠀⠀⠀⠀⠀⠀⣾⢸⡇⠀⢀⠔⠁⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⢆⡑⠀⢳⠀⢸⡆⠸⡇⠀⢻⠀⢻⣿⠂⢀⣠⠾⡿⣽⣿⣿⣏⠻⡟⢿⣇⠀⣧⣿⠇⠀⠀⠀⠀⢰⡟⢸⡿⠞⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠢⢼⣆⡀⣇⠀⣇⠀⢸⠀⠀⡿⣿⡟⠁⠀⡇⢸⢸⣿⡞⠆⠀⠀⣿⡄⠸⣿⠀⠀⠀⠀⢀⡿⠗⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠓⠴⣿⣀⢸⡄⠀⠇⣿⣁⣀⣀⣱⣼⣾⣿⣧⣠⣤⣶⣿⣧⢠⣿⣀⠤⠔⠊⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠙⠓⡲⠤⠿⠿⣿⣿⣿⣿⣟⣿⣿⣿⠿⠿⠟⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+</pre>
+
+
+
+<!-- PROFILE WINDOW -->
+
+<div class="window" id="popup">
+
+<div class="windowTitle">
+
+<span id="titleBar">profile.txt</span>
+
+<button class="close" id="close">X</button>
+
+</div>
+
+
+<div class="windowBody">
+
+<img id="photo">
+
+<h2 id="name"></h2>
+
+<p><b>Handle:</b> <span id="handle"></span></p>
+
+<br>
+
+<p id="bio"></p>
+
+</div>
+
+</div>
+
+
+
+<!-- DOCUMENT WINDOW -->
+
+<div class="window" id="docWindow">
+
+<div class="windowTitle">
+
+<span id="docTitle">
+document.txt
+</span>
+
+<button class="close" id="docClose">
+X
+</button>
+
+</div>
+
+
+<div class="windowBody">
+
+<h2 id="docName"></h2>
+
+<br>
+
+<div class="docContent" id="docText"></div>
+
+</div>
+
+</div>
+
+
+
+
+<!-- START MENU -->
+
+<div class="startMenu" id="startMenu">
+
+<div class="startHeader">
+HOSTAGE
+</div>
+
+<div class="startItem" id="documentsTab">
+📁 Documents
+</div>
+
+<div class="startItem">
+⚙ Settings
+</div>
+
+<div class="startItem">
+🔒 Lock
+</div>
+
+</div>
+
+
+
+
+<div class="taskbar">
+
+<div class="taskbutton" id="startButton">
+Start
+</div>
+
+<div class="musicPlayer">
+<span>♪ HOSTAGE RADIO</span>
+<audio controls autoplay loop>
+<source src="https://www.image2url.com/r2/default/audio/1785201311985-c858f3f2-b410-4476-9fb3-7dd91321c07f.mp3" type="audio/mpeg">
+</audio>
+</div>
+
+<div class="clock">
+5:20 PM
+</div>
+
+</div>
+
+
+
+
+
+
+<div id="loginScreen" style="display:none;position:fixed;inset:0;background:#008080;z-index:1000000;font-family:Tahoma,sans-serif">
+<div style="width:420px;margin:80px auto;background:#c0c0c0;border:2px outset #fff;padding:16px">
+<h3>Windows 95 Login</h3>
+<p>Select destination:</p>
+<button id="loginDesktop">Desktop</button>
+<button id="loginDocuments">Documents</button>
+<div id="docPicker" style="display:none;margin-top:12px"></div>
+</div></div>
+
+<script>
+
+
+// PARTICLES
+
+const particles=document.getElementById("particles");
+
+
+for(let i=0;i<120;i++){
+
+const p=document.createElement("div");
+
+p.className="particle";
+
+const s=Math.random()*5+2;
+
+p.style.width=s+"px";
+p.style.height=s+"px";
+
+p.style.left=Math.random()*100+"vw";
+
+p.style.animationDuration=(8+Math.random()*10)+"s";
+
+p.style.animationDelay=(-Math.random()*20)+"s";
+
+particles.appendChild(p);
+
+}
+
+
+
+// PROFILE WINDOWS
+
+const popup=document.getElementById("popup");
+
+
+document.querySelectorAll(".card").forEach(card=>{
+
+card.onclick=()=>{
+
+document.getElementById("titleBar").innerText=
+card.dataset.name+".txt";
+
+
+document.getElementById("name").innerText=
+card.dataset.name;
+
+
+document.getElementById("handle").innerText=
+card.dataset.handle;
+
+
+document.getElementById("bio").innerText=
+card.dataset.bio;
+
+
+document.getElementById("photo").src=
+card.dataset.img;
+
+
+popup.style.display="block";
+
+};
+
+});
+
+
+document.getElementById("close").onclick=()=>{
+
+popup.style.display="none";
+
+};
+
+
+
+
+// START MENU
+
+const startButton=document.getElementById("startButton");
+const startMenu=document.getElementById("startMenu");
+
+
+startButton.onclick=()=>{
+
+startMenu.style.display=
+startMenu.style.display==="block"
+?"none"
+:"block";
+
+};
+
+
+
+
+// DOCUMENTS
+
+
+const documents=[
+
+{
+name:"README.txt",
+text:"Welcome to HOSTAGE.\n\nSystem initialized.\n\nPlaceholder document."
+},
+
+{
+name:"notes.txt",
+text:"Encrypted notes...\n\nNothing here yet."
+},
+
+{
+name:"archive.txt",
+text:"HOSTAGE archive directory.\n\nFiles pending."
+},
+
+{
+name:"manifest.txt",
+text:"Project manifest.\n\nVersion 0.1"
+},
+
+{
+name:"log.txt",
+text:"SYSTEM LOG\n\n[OK] Boot complete."
+},
+
+{
+name:"message.txt",
+text:"No messages found."
+},
+
+{
+name:"ideas.txt",
+text:"Future concepts:\n\n- Unknown\n- Unknown"
+},
+
+{
+name:"secret.txt",
+text:"ACCESS LEVEL: UNKNOWN\n\nRestricted file."
+}
+
+];
+
+
+
+document.getElementById("documentsTab").onclick=()=>{
+
+
+startMenu.innerHTML=
+`
+<div class="startHeader">
+DOCUMENTS
+</div>
+`;
+
+
+documents.forEach(doc=>{
+
+
+const item=document.createElement("div");
+
+
+item.className="startItem";
+
+
+item.innerHTML="📄 "+doc.name;
+
+
+
+item.onclick=()=>{
+
+
+document.getElementById("docTitle").innerText=
+doc.name;
+
+
+document.getElementById("docName").innerText=
+doc.name;
+
+
+document.getElementById("docText").innerText=
+doc.text;
+
+
+document.getElementById("docWindow").style.display="block";
+
+
+};
+
+
+startMenu.appendChild(item);
+
+
+});
+
+
+};
+
+
+
+
+document.getElementById("docClose").onclick=()=>{
+
+document.getElementById("docWindow").style.display="none";
+
+};
+
+
+
+// ESC CLOSE
+
+window.onkeydown=e=>{
+
+if(e.key==="Escape"){
+
+popup.style.display="none";
+
+document.getElementById("docWindow").style.display="none";
+
+}
+
+};
+
+
+
+const login=document.getElementById('loginScreen');
+function showLogin(){login.style.display='block';}
+document.getElementById('loginDesktop').onclick=()=>{login.style.display='none';};
+const picker=document.getElementById('docPicker');
+document.getElementById('loginDocuments').onclick=()=>{
+ picker.style.display='block';picker.innerHTML='';
+ documents.forEach(d=>{let b=document.createElement('button');b.textContent=d.name;b.onclick=()=>{login.style.display='none';document.getElementById("docTitle").innerText=d.name;document.getElementById("docName").innerText=d.name;document.getElementById("docText").innerText=d.text;document.getElementById("docWindow").style.display="block";};picker.appendChild(b);});
+};
+
+</script>
+
+
+</body>
+</html>
